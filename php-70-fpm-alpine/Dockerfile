@@ -2,7 +2,7 @@ FROM alpine:3.11
 
 LABEL MAINTAINER="SATYADEEP G" \
 		"GitHub Link"="https://github.com/satyadeep" \
-		"Alpine Linux Version"="3.7.3" \
+		"Alpine Linux Version"="3.11" \
 		"PHP Version"="7.0.33" \
 		"Original Source"="https://github.com/docker-library/php"
 
