@@ -22,7 +22,8 @@ RUN apk add --no-cache --virtual .persistent-deps \
     ca-certificates \
     curl \
     tar \
-    xz
+    xz \
+    wget
 
 # ensure www-data user exists
 RUN set -xe \
@@ -73,7 +74,7 @@ RUN set -xe; \
   \
   apk del .fetch-deps
 
-COPY docker-php-* /usr/local/bin/
+COPY docker-php-source /usr/local/bin/
 
 RUN set -xe \
   && apk add --no-cache --virtual .build-deps \
@@ -117,9 +118,9 @@ RUN set -xe \
   && make install \
   && { find /usr/local/bin /usr/local/sbin -type f -perm +0111 -exec strip --strip-all '{}' + || true; } \
   && make clean \
-  && cd / \
-  && cp /usr/src/php/php.ini-development /usr/local/etc/php/php.ini \
-  && cp /usr/src/php/php.ini-production /usr/local/etc/php/php.ini.prod \
+  # && cd / \
+  # && cp /usr/src/php/php.ini-development /usr/local/etc/php/php.ini \
+  # && cp /usr/src/php/php.ini-production /usr/local/etc/php/php.ini.prod \
   && docker-php-source delete \
   \
   && runDeps="$( \
@@ -136,6 +137,8 @@ RUN set -xe \
 # https://github.com/docker-library/php/issues/443
   && pecl update-channels \
   && rm -rf /tmp/pear ~/.pearrc
+
+COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
 
 ENTRYPOINT ["docker-php-entrypoint"]
 WORKDIR /var/www/html
@@ -176,7 +179,8 @@ RUN set -ex \
     echo; \
     echo '[www]'; \
     echo 'listen = 9000'; \
-  } | tee php-fpm.d/zz-docker.conf
-
+  } | tee php-fpm.d/zz-docker.conf\
+  && sed -i 's/^listen =/;listen =/' /usr/local/etc/php-fpm.d/www.conf \
+  && sed -i 's/^listen =/;listen =/' /usr/local/etc/php-fpm.conf.default
 EXPOSE 9000
 CMD ["php-fpm"]
