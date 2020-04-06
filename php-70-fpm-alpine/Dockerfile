@@ -202,7 +202,9 @@ RUN set -ex \
 		echo 'daemonize = no'; \
 		echo; \
 		echo '[www]'; \
-		echo 'listen = 9000'; \
+		# echo 'listen = 9000'; \
+		echo 'listen = 0.0.0.0:9000'; \
+		# See Here https://github.com/docker-library/php/issues/194#issuecomment-196297008
 	} | tee php-fpm.d/zz-docker.conf
 
 EXPOSE 9000
