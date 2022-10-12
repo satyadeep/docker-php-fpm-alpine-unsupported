@@ -1,4 +1,4 @@
-FROM satyadeep/alpine-linux:3.8
+FROM alpine:3.8
 
 LABEL MAINTAINER="SATYADEEP G" \
 		"GitHub Link"="https://github.com/satyadeep" \
@@ -81,8 +81,9 @@ RUN set -xe; \
 		wget -O php.tar.xz.asc "$PHP_ASC_URL"; \
 		export GNUPGHOME="$(mktemp -d)"; \
 		for key in $GPG_KEYS; do \
-			gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
+			# gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
 			( gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$key" \
+			|| gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 \ --recv-keys "$key" \
   			|| gpg --keyserver pgp.mit.edu --recv-keys "$key" \
   			|| gpg --keyserver keyserver.pgp.com --recv-keys "$key" )\
 		done; \
