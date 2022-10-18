@@ -6,3 +6,5 @@
 * PHP 5.5 & 5.6 are based on Alpine Linux 3.8
 * PHP 7.0 is based on Alpine Linux 3.7
 * PHP 7.1 is based on Alpine Linux 3.12
+
+**Please note that PHP 5.3 will not compile on ARM64 architecture as the base Alpine Linux 3.4 is not available for AARCH64 **
